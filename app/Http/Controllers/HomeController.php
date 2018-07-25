@@ -10,26 +10,22 @@ namespace App\Http\Controllers;
 
 use Sunra\PhpSimple\HtmlDomParser;
 //use Sunra\PhpSimple\HtmlDomParser;
-
+use Goutte\Client;
+use GuzzleHttp\Client as GuzzleClient;
 class HomeController extends  Controller
 {
 
 
     public function index(){
-//        $url  = "http://www.google.com"  ;
-//        $html = HtmlDomParser::file_get_html($url, false, null , 0);
-//
-//        foreach($html->find('img') as $element) {
-//            echo '<img src="'.$url.$element->src.'" /><br>';
-//        }
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, 'https://vnexpress.net/');
-        curl_setopt($ch, CURLOPT_HEADER, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $data = curl_exec($ch);
+        $client = new Client();
+        $crawler = $client->request('GET', 'https://vi.aliexpress.com/item/FLOVEME-Magnetic-Car-Phone-Holder-2-pack-Universal-Wall-Desk-Metal-Magnet-Sticker-Mobile-Stand-Phone/32837999990.html');
 
-        curl_close($ch);
+        $crawler->filter('div#j-product-tabbed-pane')->each(function ($node) {
+            echo '<pre>' ;
+            print $node->text()."\n";
+            echo '</pre>' ;
+        });
         return view('home.index') ;
     }
 

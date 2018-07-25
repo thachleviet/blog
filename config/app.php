@@ -160,6 +160,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Ammadeuss\LaravelHtmlDomParser\ServiceProvider::class,
+        RocketCode\Shopify\ShopifyServiceProvider::class
     ],
 
     /*
