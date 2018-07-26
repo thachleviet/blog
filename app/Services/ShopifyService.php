@@ -14,26 +14,30 @@ use Illuminate\Support\Facades\App;
 class ShopifyService
 {
 
-    protected $_shopify ;
-    public function __construct()
-    {
-        $this->_shopify  = App::make('ShopifyAPI');
-        $this->_shopify->setup(['API_KEY' => env("API_KEY"), 'API_SECRET' =>  env("API_SECRET")]);
-    }
-
-
-    public function installURL(){
-        return $this->_shopify->installURL(['permissions' => config('shopify.scope.write_orders') ,'redirect' => config('shopify.scope.redirect_before_install')]) ;
-    }
-
+    /**
+     * @var
+     */
+    protected $_shopify;
 
     /**
+     * ShopifyServices constructor.
      * @param $accessToken
+     * @param $shopDomain
      */
-    public function setAccessToken($accessToken)
+    public function __construct()
     {
-        $this->_shopify->setup(['ACCESS_TOKEN' => $accessToken]);
+        $this->_shopify = App::make('ShopifyAPI');
+        $this->_shopify->setup(['API_KEY' => env('API_KEY'), 'API_SECRET' => env('API_SECRET')]);
     }
+
+    /**
+     * @return mixed
+     */
+    public function installURL()
+    {
+        return $this->_shopify->installURL(['permissions' => config('shopify.scope'), 'redirect' => config('shopify.redirect_before_install')]);
+    }
+
     /**
      * @param $shopDomain
      */
@@ -44,22 +48,11 @@ class ShopifyService
 
     /**
      * @param $accessToken
-     * @param $shopDomain
-     * @return mixed
-     * @throws \Exception
      */
-    public function getAccessToken($accessToken, $shopDomain)
+    public function setAccessToken($accessToken)
     {
-        try{
-            $this->setShopDomain($shopDomain);
-            $this->setAccessToken($accessToken);
-            return $this->_shopify;
-
-        } catch (\Exception $exception) {
-            throw new \Exception($exception->getMessage());
-        }
+        $this->_shopify->setup(['ACCESS_TOKEN' => $accessToken]);
     }
-
 
     /**
      * @param $request
@@ -80,6 +73,24 @@ class ShopifyService
             return ['status' => false, 'message' => 'Request not verify'];
         } catch (\Exception $exception)
         {
+            throw new \Exception($exception->getMessage());
+        }
+    }
+
+    /**
+     * @param $accessToken
+     * @param $shopDomain
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getAccessToken($accessToken, $shopDomain)
+    {
+        try{
+            $this->setShopDomain($shopDomain);
+            $this->setAccessToken($accessToken);
+            return $this->_shopify;
+
+        } catch (\Exception $exception) {
             throw new \Exception($exception->getMessage());
         }
     }

@@ -18,5 +18,13 @@ Route::get('/', function () {
 
 Route::group(['middleware' => ['web'], 'prefix' => '' ], function() {
     Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/install', 'AppController@installApp')->name('app');
+    Route::get('/submitInstall', 'AppController@submitInstall')->name('submit_install');
+    Route::get('/auth', 'AppController@auth')->name('auth');
+});
+
+
+Route::group(['middleware' => ['web'], 'prefix' => 'product' ], function() {
+    Route::get('/', 'ProductController@index')->name('product');
 
 });

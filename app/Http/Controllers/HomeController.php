@@ -22,9 +22,9 @@ class HomeController extends  Controller
         $crawler = $client->request('GET', 'https://vi.aliexpress.com/item/FLOVEME-Magnetic-Car-Phone-Holder-2-pack-Universal-Wall-Desk-Metal-Magnet-Sticker-Mobile-Stand-Phone/32837999990.html');
 
         $crawler->filter('div#j-product-tabbed-pane')->each(function ($node) {
-            echo '<pre>' ;
-            print $node->text()."\n";
-            echo '</pre>' ;
+//            echo '<pre>' ;
+//            print $node->text()."\n";
+//            echo '</pre>' ;
         });
         return view('home.index') ;
     }

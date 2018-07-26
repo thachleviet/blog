@@ -9,7 +9,8 @@
 namespace App\ShopifyApi;
 
 
-use App\Repositorys\ShopifyApi\ShopsApiInterface;
+
+use App\Contracts\ShopifyAPI\ShopsApiInterface;
 use App\Services\ShopifyService;
 
 class ShopifyApi extends ShopifyService implements ShopsApiInterface
