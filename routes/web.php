@@ -26,5 +26,6 @@ Route::group(['middleware' => ['web'], 'prefix' => '' ], function() {
 
 Route::group(['middleware' => ['web'], 'prefix' => 'product' ], function() {
     Route::get('/', 'ProductController@index')->name('product');
-
+    Route::get('/{id}', 'ProductController@edit')->name('product.edit');
+    Route::put('/{id}', 'ProductController@submitEdit')->name('product.submit_edit');
 });

@@ -113,6 +113,7 @@ class ProductsApi extends  GuzzleHttp implements ProductsApiInterface
      */
     public function update(string $product, array $data) : array
     {
+
         try{
             $product = $this->put('products/'.$product.'.json',['product' => $data]);
 

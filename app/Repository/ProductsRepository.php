@@ -124,10 +124,9 @@ class ProductsRepository {
 	 *
 	 * @return array
 	 */
-	public function getAll( $shopId, $filter = [], $orderBy = [] ) {
-		try {
-			$products = DB::connection( $this->_productModel->getConnectionName() )->table( $this->getTableProduct( $shopId ) );
 
+	/*
+	 *
 			if ( isset( $filter['currentPage'] ) ) {
 				$currentPage = $filter['currentPage'];
 				Paginator::currentPageResolver( function () use ( $currentPage ) {
@@ -151,13 +150,18 @@ class ProductsRepository {
 			$products->orderBy( 'created_at', 'DESC' );
 			$listProducts = $products->paginate( config( 'common.pagination' ) );
 
-			if ( isset( $filter['currentPage'] ) ) {
+		if ( isset( $filter['currentPage'] ) ) {
 				Paginator::currentPageResolver( function () {
 					return 1;
 				} );
 			}
+	 */
+	public function getAll( $shopId, $filter = [], $orderBy = [] ) {
+		try {
+			$products = DB::connection( $this->_productModel->getConnectionName() )->table( $this->getTableProduct( $shopId ) );
 
-			return [ 'status' => true, 'products' => $listProducts ];
+			return $products->orderBy( 'created_at', 'DESC' )->paginate();
+
 		} catch ( \Exception $exception ) {
 			return [ 'status' => false, 'message' => $exception->getMessage() ];
 		}
@@ -193,6 +197,29 @@ class ProductsRepository {
 		}
 	}
 
+
+	public function getItem($idShop , $productId){
+
+        try {
+            $connection = $this->_productModel->getConnectionName();
+            $prodTableName = $this->getTableProduct($idShop);
+            $product = DB::connection($connection)
+                ->table($prodTableName)
+                ->where('id', $productId)
+                ->first();
+
+            return $product;
+        } catch (Exception $ex) {
+
+            return $ex->getMessage();
+        }
+    }
+
+    public function updateProduct($idShop, $productId ,$data){
+        $products = DB::connection( $this->_productModel->getConnectionName() )->table( $this->getTableProduct( $idShop ) );
+        $products->where('id', $productId) ;
+        $products->update(['title'=>$data['name']]) ;
+    }
 	/**
 	 * Count total products
 	 *

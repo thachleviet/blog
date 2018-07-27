@@ -66,28 +66,33 @@ class AppController extends Controller
             if ( ! $shopInfoApi['status'] ) {
                 return redirect( route( 'app' ) )->with( 'error', $shopInfoApi['message'] );
             }
-
             $shopInfoApi = $shopInfoApi['shop'];
+            session( [
+                'accessToken' => $accessToken,
+                'shopDomain'  => $shopDomain,
+                'shopId'      => $shopInfoApi->id
+            ] );
 
-            $shopInfoDB = $mShops->detail( [ 'shop_id' => $shopInfoApi->id ] );
 
-            $recordShop   = [
-                'shop_id'      => $shopInfoApi->id,
-                'shop_name'    => isset( $shopInfoApi->myshopify_domain ) ? $shopInfoApi->myshopify_domain : null,
-                'shop_email'   => isset( $shopInfoApi->email ) ? $shopInfoApi->email : null,
-//                'shop_status'  => config( 'common.status.publish' ),
-                'shop_country' => isset( $shopInfoApi->country ) ? $shopInfoApi->country : null,
-                'shop_owner'   => isset( $shopInfoApi->shop_owner ) ? $shopInfoApi->shop_owner : null,
-                'plan_name'    => isset( $shopInfoApi->plan_name ) ? $shopInfoApi->plan_name : null,
-//                'app_version'  => config( 'common.app_version', null ),
-//                'app_plan'     => $app_plan,
-                'access_token' => $accessToken
-            ];
-            $saveInfoShops  = $mShops->inserts( $recordShop );
-            if($saveInfoShops['status']){
+//            $shopInfoDB = $mShops->detail( [ 'shop_id' => $shopInfoApi->id ] );
+//
+//            $recordShop   = [
+//                'shop_id'      => $shopInfoApi->id,
+//                'shop_name'    => isset( $shopInfoApi->myshopify_domain ) ? $shopInfoApi->myshopify_domain : null,
+//                'shop_email'   => isset( $shopInfoApi->email ) ? $shopInfoApi->email : null,
+////                'shop_status'  => config( 'common.status.publish' ),
+//                'shop_country' => isset( $shopInfoApi->country ) ? $shopInfoApi->country : null,
+//                'shop_owner'   => isset( $shopInfoApi->shop_owner ) ? $shopInfoApi->shop_owner : null,
+//                'plan_name'    => isset( $shopInfoApi->plan_name ) ? $shopInfoApi->plan_name : null,
+////                'app_version'  => config( 'common.app_version', null ),
+////                'app_plan'     => $app_plan,
+//                'access_token' => $accessToken
+//            ];
+//            $saveInfoShops  = $mShops->inserts( $recordShop );
+//            if($saveInfoShops['status']){
                 //Import Database
                 $this->dispatch( new ImportProductsFromApi( $shopInfoApi->id, $accessToken, $shopDomain ) );
-            }
+//            }
             return redirect( route( 'home' ) );
         }
     }
